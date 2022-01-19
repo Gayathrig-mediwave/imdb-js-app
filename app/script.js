@@ -46,6 +46,18 @@ function makeMovieListHTML(movies) {
     pGenre.textContent = movie.genre;
     div.appendChild(pGenre);
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    div.appendChild(deleteBtn);
+
+    deleteBtn.addEventListener("click", function () {
+      console.log(movie.id);
+      console.log(movie.name);
+      //deleteMovieInApi(movie);
+      let url = "http://localhost:1337/api/movies/" + movie.id;
+      console.log(url);
+      deleteMovieInApi(url);
+    });
     listDiv.appendChild(div);
   }
 }
@@ -78,7 +90,27 @@ function createMovieInAPI(movie) {
       return result.json();
     })
     .then(function (data) {
+      getMoviesFromAPI();
       console.log("API success");
+      console.log(data);
+    });
+}
+
+function deleteMovieInApi(url) {
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: null,
+  })
+    .then(function (result) {
+      return result.json();
+      console.log("API success");
+    })
+    .then(function (data) {
+      getMoviesFromAPI();
+      console.log("DEL success");
       console.log(data);
     });
 }
